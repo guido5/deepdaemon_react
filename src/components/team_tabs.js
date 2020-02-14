@@ -21,7 +21,7 @@ const TeamTabs = ({ callback }) => {
       <hr />
       <Tab.Content>
         <Tab.Pane eventKey="current">
-          <Team callback={callback} status="current" />
+          <Team callback={callback}/>
         </Tab.Pane>
         <Tab.Pane eventKey="graduate">
           <Team callback={callback} status="graduate" />

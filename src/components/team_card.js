@@ -26,6 +26,7 @@ class Team_card extends React.Component {
     };
   }
   componentDidMount() {
+    ////api.deepdaemon.org/members/
     fetch("//api.deepdaemon.org/members/" + this.props.status, {
       method: "GET"
     })
@@ -72,7 +73,7 @@ class Team_card extends React.Component {
           {team.map(person => {
             const filename =
               person.photo_filename != null
-                ? `${process.env.PUBLIC_URL}/static/media/team/small/${
+                ? `${process.env.PUBLIC_URL}/media/team/small/${
                     person.photo_filename
                   }`
                 : require("../assets/img/user.png");

@@ -8,7 +8,7 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 
 import logo from "./assets/img/deepdaemon.png";
-import join from "./assets/img/join_team.png";
+import join from "./assets/img/kissclipart-logo-intelligence-clipart-machine-learning-artific-0eb8b24961c90301.png";
 import "./assets/icomoon/icomoon.css"; //https://icomoon.io/#preview-free
 
 import "./DeepDaemon.css";
@@ -17,6 +17,7 @@ import Team from "./components/team_card";
 import TeamTabs from "./components/team_tabs";
 import ModalMember from "./components/modal_member";
 import ModalProject from "./components/modal_project";
+import {Tabs, Tab } from "react-bootstrap";
 
 class DeepDaemon extends React.Component {
   constructor() {
@@ -154,14 +155,24 @@ class DeepDaemon extends React.Component {
           </Container>
         </Container>
         <Container fluid className="section portfolio" ref={this.portfolio}>
-          <h1>Proyectos increibles</h1>
-          <hr />
-          <Projects callback={this.openProject.bind(this)} />
+        <h1>Proyectos increibles</h1>
+
+          <Tab.Container defaultActiveKey="inDevelop">
+            <Nav className="projects">
+              <Nav.Item><Nav.Link eventKey="inDevelop"><h1>En desarrollo</h1></Nav.Link></Nav.Item>
+              <Nav.Item><Nav.Link eventKey="article"><h1>Concluidos</h1></Nav.Link></Nav.Item>
+            </Nav>
+            <hr />
+            <Tab.Content>
+                <Tab.Pane eventKey="inDevelop"><Projects state="inDevelop" callback={this.openProject.bind(this)} /></Tab.Pane>
+                <Tab.Pane eventKey="article"><Projects state="finish" callback={this.openProject.bind(this)} /></Tab.Pane>
+            </Tab.Content>
+          </Tab.Container>
         </Container>
         <Container className="section">
           <Row>
             <Col md="auto">
-              <Image src={join} style={{ height: "350px" }} fluid />
+              <Image src={join} style={{ height: "320px" }} fluid />
             </Col>
             <Col>
               <h1>Únete al equipo!</h1>
@@ -186,7 +197,7 @@ class DeepDaemon extends React.Component {
             </h2>
           </Container>
         </Container>
-        <Container className="section" ref={this.leaders}>
+        <Container fluid className="section" ref={this.leaders}>
           <h1>Los líderes</h1>
           <hr />
           <Team status="leader" callback={this.updateModal.bind(this)} />
@@ -224,6 +235,7 @@ class DeepDaemon extends React.Component {
         <ModalMember
           ref={ip => {
             this.membermodal = ip;
+            console.log(this.membermodal);
           }}
         />
         <ModalProject

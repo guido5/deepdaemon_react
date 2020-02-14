@@ -22,6 +22,21 @@ class Project
         $this->parse_all($stmt);
     }
 
+    public function read_by_state($state)
+    {
+        // select all query
+        $query = "SELECT *
+                    FROM project
+                    WHERE state='$state'
+                    ORDER BY name;";
+        // prepare query statement
+        $stmt = $this->conn->prepare($query);
+        // execute query
+        $stmt->execute();
+        
+        $this->parse_all($stmt);
+    }
+
     public function read($id)
     {
         $query = "SELECT p.id, p.name, p.`desc`, p.impact, p.modal_type, p.modal_media, p.link,
@@ -81,6 +96,7 @@ class Project
                     "id" => $id,
                     "name" => $name,
                     "desc" => $desc,
+                    "state" => $state,
                     "impact" => $impact,
                     "front_img" => $front_img,
                     "modal_media" => $modal_media,

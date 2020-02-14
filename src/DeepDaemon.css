@@ -126,6 +126,19 @@ hr {
   padding: 0 0.5rem;
 }
 
+.projects .nav-item {
+  margin: auto;
+}
+.projects .nav-link {
+  background-color: transparent;
+  color: inherit;
+  border-radius: 10px;
+}
+
+.projects .nav-link.active {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
 @import url("https://use.fontawesome.com/releases/v5.0.10/css/all.css");
 
 /*@keyframes App-logo-spin {

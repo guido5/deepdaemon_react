@@ -8,3 +8,4 @@ RewriteRule ^members/([a-zA-Z]+)/?$ members.php?status=$1 [NC,L]
 #Rules for projects
 RewriteRule ^projects/?$ projects.php [NC,L]
 RewriteRule ^projects/([0-9]+)/?$ projects.php?project_id=$1 [NC,L]
+RewriteRule ^projects/([a-zA-Z]+)/?$ projects.php?state=$1 [NC,L]

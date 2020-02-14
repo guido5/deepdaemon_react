@@ -4,8 +4,8 @@
 }
 
 .project.card {
-  min-width: 25rem;
-  max-width: 25rem;
+  min-width: 35rem;
+  max-width: 35rem;
   margin: 1rem auto !important;
   border: none;
 }
@@ -17,4 +17,17 @@
 
 .project.card .card-header {
   border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.projectTitle {
+  display: inline-block;
+  width: 50%;
+  position: relative;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  vertical-align: middle;
+}
+
+.card-img {
+  width: 25% !important;
 }

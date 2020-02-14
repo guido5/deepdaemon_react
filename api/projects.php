@@ -28,7 +28,12 @@ switch($request_method)
             $project_id=intval($_GET["project_id"]);
             $project->read($project_id);
         }
-        else
+        else if(!empty($_GET["state"]))
+        {
+            $state = $_GET["state"];
+            $project->read_by_state($state);
+        }
+        else 
         {
             $project->read_all();
         }
