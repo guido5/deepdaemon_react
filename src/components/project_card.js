@@ -81,7 +81,22 @@ class Project_card extends React.Component {
             {projects.map(project => (
                 <Card key={project.id} className="project">
                   <Card.Header>
-                  {media}
+                  <Card.Img
+                    src={
+                      projects.front_img != null
+                        ? `${process.env.PUBLIC_URL}/media/project/${
+                            projects.front_img
+                          }`
+                        : require("../assets/img/join_team.png")
+                    }
+                    alt={
+                      projects.modal_media != null
+                        ? `${process.env.PUBLIC_URL}/media/project/${
+                            projects.front_img
+                          }`
+                        : require("../assets/img/placeholder.jpg")
+                    }
+                  />
                     <div className="projectTitle">
                     {project.name}
                     </div>
