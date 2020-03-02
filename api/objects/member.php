@@ -69,6 +69,24 @@ class Member
         $this->parse_one($stmt);
     }
 
+    public function write($name, $lastname, $linkedin, $email, $short_desc, $long_desc, $status, $ss) {
+        $path = '/home/deepdaem/public_html/media/team/small/';
+        echo $path;
+        //$path = '../public/media/team/small/';
+        try {
+            $file = $_FILES['archivo']['name'];
+            $query = "INSERT INTO member(name, lastname, linkedin, email, short_desc, long_desc, status, photo_filename, ss) VALUES ('$name', '$lastname', '$linkedin', '$email', '$short_desc', '$long_desc', '$status', '$file', $ss);";
+            //$query = "INSERT INTO member(name, lastname, linkedin, email, short_desc, long_desc, status, ss) VALUES ('Diego', 'Guido', 'asfg', 'agg', 'asgfdsg', 'asdfhghbndsmfuy', 'current', 0);";
+            $this->conn->exec($query);
+            copy($_FILES['archivo']['tmp_name'], $path.$_FILES['archivo']['name']);
+            echo "Se guardaron los datos";
+        } catch (PDOException $e) {
+            echo "Error no se guardaron los datos.";
+        }
+        
+
+    }
+
     private function parse($stmt)
     {
         $num = $stmt->rowCount();

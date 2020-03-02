@@ -35,9 +35,27 @@ switch($request_method)
         }
         break;
     case 'POST':
+        $nombre = $_POST["nombre"];
+        $apellido = $_POST["apellido"];
+        $linkedin = $_POST["linkedin"];
+        $email = $_POST["email"];
+        $short_desc = $_POST["short_desc"];
+        $long_desc = $_POST["long_desc"];
+        $status = $_POST["status"];
+        $ss = $_POST["ss"];
+        
+        $member->write($nombre, 
+                        $apellido,
+                        $linkedin,
+                        $email,
+                        $short_desc,
+                        $long_desc,
+                        $status,
+                        $ss);
+
         // Insert Product
-        //$data = json_decode(file_get_contents("php://input"));
-        //insert_product();
+        //$data = json_decode('{"name":' + $nombre + ', "lastname":' + $apellido + ', "linkedin":' + $linkedin +', "email":' + $email + ', "short_desc":' + $short_desc + ', "long_desc":' + $long_desc + ', "status": ' + $status + ', "ss":' + $ss + '}');
+        //echo $data;
         break;
     case 'PUT':
         // Update Product
