@@ -3,7 +3,6 @@ import Card from "react-bootstrap/Card";
 import CardDeck from "react-bootstrap/CardDeck";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
-import Accordion from "react-bootstrap/Accordion";
 import "./project_card.css";
 
 class Project_card extends React.Component {
@@ -58,30 +57,28 @@ class Project_card extends React.Component {
       );
     } else {
       if (projects.length > 0) {
-        const media = (
-          <Card.Img
-            src={
-              projects.front_img != null
-                ? `${process.env.PUBLIC_URL}/static/media/project/${
-                    projects.front_img
-                  }`
-                : require("../assets/img/join_team.png")
-            }
-            alt={
-              projects.modal_media != null
-                ? `${process.env.PUBLIC_URL}/static/media/project/${
-                    projects.front_img
-                  }`
-                : require("../assets/img/placeholder.jpg")
-            }
-          />
-        );
+        
         return (
           <CardDeck>
             {projects.map(project => (
                 <Card key={project.id} className="project">
                   <Card.Header>
-                  {media}
+                    <Card.Img
+                      src={
+                        project.front_img != null
+                          ? `${process.env.PUBLIC_URL}/media/project/${
+                              project.front_img
+                            }`
+                          : require("../assets/img/join_team.png")
+                      }
+                      alt={
+                        project.modal_media != null
+                          ? `${process.env.PUBLIC_URL}/media/project/${
+                              project.front_img
+                            }`
+                          : require("../assets/img/placeholder.jpg")
+                      }
+                    />
                     <div className="projectTitle">
                     {project.name}
                     </div>

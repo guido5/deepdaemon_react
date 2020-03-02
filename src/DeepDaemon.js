@@ -17,7 +17,7 @@ import Team from "./components/team_card";
 import TeamTabs from "./components/team_tabs";
 import ModalMember from "./components/modal_member";
 import ModalProject from "./components/modal_project";
-import {Tabs, Tab } from "react-bootstrap";
+import {Tab } from "react-bootstrap";
 
 class DeepDaemon extends React.Component {
   constructor() {
@@ -168,6 +168,7 @@ class DeepDaemon extends React.Component {
                 <Tab.Pane eventKey="article"><Projects state="finish" callback={this.openProject.bind(this)} /></Tab.Pane>
             </Tab.Content>
           </Tab.Container>
+          
         </Container>
         <Container className="section">
           <Row>
