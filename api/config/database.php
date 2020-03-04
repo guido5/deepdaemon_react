@@ -1,5 +1,6 @@
 <?php
 
+include __DIR__ ."/../objects/SystemInfo.php";
 class Database
 {
 
@@ -11,10 +12,10 @@ class Database
 
     // getting database credentials from json file
     public function __construct() {
-        $this->host     = "deepdaemon.org";
-        $this->db_name  = "deepdaem_web";
-        $this->username = "deepdaem_web";
-        $this->password = "password";
+        $this->host     = SystemInfo::$host;
+        $this->db_name  = SystemInfo::$db_name;
+        $this->username = SystemInfo::$username;
+        $this->password = SystemInfo::$password;
     }
 
     // get the database connection

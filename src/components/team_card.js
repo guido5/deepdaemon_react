@@ -7,6 +7,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import Spinner from "react-bootstrap/Spinner";
 import Button from "react-bootstrap/Button";
 import Popover from "react-bootstrap/Popover";
+import System from "./System.js";
 import "./team_card.css";
 
 class Team_card extends React.Component {
@@ -27,7 +28,7 @@ class Team_card extends React.Component {
   }
   componentDidMount() {
     ////api.deepdaemon.org/members/
-    fetch("//api.deepdaemon.org/members/" + this.props.status, {
+    fetch(System.urlConection + System.members + this.props.status, {
       method: "GET"
     })
       .then(res => res.json())

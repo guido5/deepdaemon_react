@@ -8,6 +8,7 @@ import {
   OverlayTrigger,
   Tooltip
 } from "react-bootstrap";
+import System from "./System.js";
 import "./modal_project.css";
 
 class Modal_project extends React.Component {
@@ -26,7 +27,7 @@ class Modal_project extends React.Component {
 
   open(id) {
     this.setState({ showModal: true });
-    fetch("//api.deepdaemon.org/projects/" + id, {
+    fetch(System.urlConection + System.projects + id, {
       method: "GET"
     })
       .then(res => res.json())

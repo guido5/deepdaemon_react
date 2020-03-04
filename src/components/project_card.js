@@ -3,6 +3,7 @@ import Card from "react-bootstrap/Card";
 import CardDeck from "react-bootstrap/CardDeck";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
+import System from "./System.js";
 import "./project_card.css";
 
 class Project_card extends React.Component {
@@ -21,7 +22,7 @@ class Project_card extends React.Component {
     };
   }
   componentDidMount() {
-    fetch("//api.deepdaemon.org/projects/"+ this.props.state, { method: "GET" })
+    fetch(System.urlConection + System.projects + this.props.state, { method: "GET" })
       .then(res => res.json())
       .then(
         result => {
@@ -40,6 +41,7 @@ class Project_card extends React.Component {
   }
   render() {
     const { error, isLoaded, projects } = this.state;
+    
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
@@ -56,8 +58,7 @@ class Project_card extends React.Component {
         </Button>
       );
     } else {
-      if (projects.length > 0) {
-        
+      if (projects.length > 0) {        
         return (
           <CardDeck>
             {projects.map(project => (

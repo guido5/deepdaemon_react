@@ -1,5 +1,6 @@
 import React from "react";
 import { Modal, Image, Spinner, Button, Container } from "react-bootstrap";
+import System from "./System.js";
 import "./modal_member.css";
 
 class Modal_member extends React.Component {
@@ -18,7 +19,7 @@ class Modal_member extends React.Component {
 
   open(id) {
     this.setState({ showModal: true });
-    fetch("//api.deepdaemon.org/members/" + id, {
+    fetch(System.urlConection + System.members + id, {
       method: "GET"
     })
       .then(res => res.json())
