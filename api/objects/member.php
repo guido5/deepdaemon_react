@@ -70,21 +70,37 @@ class Member
     }
 
     public function write($name, $lastname, $linkedin, $email, $short_desc, $long_desc, $status, $ss) {
-        $path = '/home/deepdaem/public_html/media/team/small/';
-        echo $path;
-        //$path = '../public/media/team/small/';
         try {
             $file = $_FILES['archivo']['name'];
             $query = "INSERT INTO member(name, lastname, linkedin, email, short_desc, long_desc, status, photo_filename, ss) VALUES ('$name', '$lastname', '$linkedin', '$email', '$short_desc', '$long_desc', '$status', '$file', $ss);";
-            //$query = "INSERT INTO member(name, lastname, linkedin, email, short_desc, long_desc, status, ss) VALUES ('Diego', 'Guido', 'asfg', 'agg', 'asgfdsg', 'asdfhghbndsmfuy', 'current', 0);";
             $this->conn->exec($query);
-            copy($_FILES['archivo']['tmp_name'], $path.$_FILES['archivo']['name']);
+            copy($_FILES['archivo']['tmp_name'], SystemInfo::$path.$_FILES['archivo']['name']);
             echo "Se guardaron los datos";
         } catch (PDOException $e) {
             echo "Error no se guardaron los datos.";
-        }
-        
+        }  
+    }
 
+    public function update($id, $name, $lastname, $linkedin, $email, $short_desc, $long_desc, $status, $ss) {
+        try {
+            $file = $_FILES['archivo']['name'];
+            $query = "UPDATE member SET name='$name', lastname='$lastname', linkedin='$linkedin', email='$email', short_desc='$short_desc', long_desc='$long_desc', status='$status', photo_filename='$photo_filename', ss='$ss' WHERE id='$id';";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute();
+            copy($_FILES['archivo']['tmp_name'], SystemInfo::$path.$_FILES['archivo']['name']);
+            echo "Se actualizaron los datos";
+        } catch (PDOException $e) {
+            echo "Error no se guardaron los datos.";
+        }  
+    }
+
+    public function delete($id) {
+        try{
+            $query = "DELETE FROM member WHERE id='$id'";
+            $this->conn->exec($query);
+        } catch (PDOException $e) {
+            echo "Error no se elimino los datos.";
+        } 
     }
 
     private function parse($stmt)

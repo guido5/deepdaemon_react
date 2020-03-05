@@ -19,20 +19,18 @@ $db = $database->getConnection();
 $member = new Member($db);
 
 $request_method=$_SERVER["REQUEST_METHOD"];
-switch($request_method)
-{
+switch($request_method) {
     case 'GET':
         // Retrive members
-        if(isset($_GET["member_id"]))
-        {
+        if(isset($_GET["member_id"])) {
             $member_id=intval($_GET["member_id"]);
             $member->read($member_id);
         }
-        else
-        {
+        else {
             $status = empty($_GET["status"])?"current":$_GET["status"];
             $member->read_all($status);
         }
+
         break;
     case 'POST':
         $nombre = $_POST["nombre"];
@@ -43,8 +41,11 @@ switch($request_method)
         $long_desc = $_POST["long_desc"];
         $status = $_POST["status"];
         $ss = $_POST["ss"];
-        
-        $member->write($nombre, 
+        $codeOp = $_POST["codeOp"];
+
+        switch($codeOp) {
+            case 'create':
+                $member->write($nombre, 
                         $apellido,
                         $linkedin,
                         $email,
@@ -52,20 +53,25 @@ switch($request_method)
                         $long_desc,
                         $status,
                         $ss);
-
-        // Insert Product
-        //$data = json_decode('{"name":' + $nombre + ', "lastname":' + $apellido + ', "linkedin":' + $linkedin +', "email":' + $email + ', "short_desc":' + $short_desc + ', "long_desc":' + $long_desc + ', "status": ' + $status + ', "ss":' + $ss + '}');
-        //echo $data;
-        break;
-    case 'PUT':
-        // Update Product
-        //$product_id=intval($_GET["product_id"]);
-        //update_product($product_id);
-        break;
-    case 'DELETE':
-        // Delete Product
-        //$product_id=intval($_GET["product_id"]);
-        //delete_product($product_id);
+            break;
+            case 'update':
+                $id = $_POST['id'];
+                $member->update($id,
+                        $nombre, 
+                        $apellido,
+                        $linkedin,
+                        $email,
+                        $short_desc,
+                        $long_desc,
+                        $status,
+                        $ss);
+            break;
+            case 'delete':
+                $id = $_POST['id'];
+                $member->delete($id);
+            break;
+        }
+        
         break;
     default:
         // Invalid Request Method
