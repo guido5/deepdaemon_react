@@ -116,7 +116,7 @@ class Modal_member extends React.Component {
     } else {
       const filename =
         member.photo_filename != null
-          ? `${process.env.PUBLIC_URL}/static/media/team/${
+          ? `${process.env.PUBLIC_URL}/media/team/${
               member.photo_filename
             }`
           : require("../assets/img/user.png");

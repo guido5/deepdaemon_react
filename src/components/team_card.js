@@ -27,7 +27,6 @@ class Team_card extends React.Component {
     };
   }
   componentDidMount() {
-    ////api.deepdaemon.org/members/
     fetch(System.urlConection + System.members + this.props.status, {
       method: "GET"
     })
