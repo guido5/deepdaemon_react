@@ -67,14 +67,14 @@ class Project_card extends React.Component {
                     <Card.Img
                       src={
                         project.front_img != null
-                          ? `${process.env.PUBLIC_URL}/media/project/${
+                          ? `${process.env.PUBLIC_URL}/media/projects/${
                               project.front_img
                             }`
                           : require("../assets/img/join_team.png")
                       }
                       alt={
                         project.modal_media != null
-                          ? `${process.env.PUBLIC_URL}/media/project/${
+                          ? `${process.env.PUBLIC_URL}/media/projects/${
                               project.front_img
                             }`
                           : require("../assets/img/placeholder.jpg")

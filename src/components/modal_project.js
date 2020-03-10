@@ -103,14 +103,14 @@ class Modal_project extends React.Component {
               className="media"
               src={
                 project.modal_media != null
-                  ? `${process.env.PUBLIC_URL}/media/project/${
+                  ? `${process.env.PUBLIC_URL}/media/projects/${
                       project.modal_media
                     }`
                   : require("../assets/img/project_detail.jpg")
               }
               alt={
                 project.modal_media != null
-                  ? `${process.env.PUBLIC_URL}/media/project/${
+                  ? `${process.env.PUBLIC_URL}/media/projects/${
                       project.modal_media
                     }`
                   : require("../assets/img/project_detail.jpg")
@@ -124,7 +124,7 @@ class Modal_project extends React.Component {
               <source
                 src={
                   project.modal_media != null
-                    ? `${process.env.PUBLIC_URL}/media/project/${
+                    ? `${process.env.PUBLIC_URL}/media/projects/${
                         project.modal_media
                       }`
                     : require("../assets/img/project_media.mp4")

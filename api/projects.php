@@ -39,19 +39,26 @@ switch($request_method)
         }
         break;
     case 'POST':
-        // Insert Product
-        //$data = json_decode(file_get_contents("php://input"));
-        //insert_product();
-        break;
-    case 'PUT':
-        // Update Product
-        //$product_id=intval($_GET["product_id"]);
-        //update_product($product_id);
-        break;
-    case 'DELETE':
-        // Delete Product
-        //$product_id=intval($_GET["product_id"]);
-        //delete_product($product_id);
+        $codeOp = $_POST['codeOp'];
+        $name = $_POST['name'];
+        $desc = $_POST['desc'];
+        $state = $_POST['state'];
+        $impact = $_POST['impact'];
+        $modal_type = $_POST['modal_type'];
+        $link = $_POST['link'];
+        switch($codeOp) {
+            case 'create':
+                $project->create($name, $desc, $state, $impact, $modal_type, $link);
+                break;
+            case 'update': 
+                $id = $_POST['id'];
+                $project->update($id, $name, $desc, $state, $impact, $modal_type, $link);
+                break;
+            case 'delete':
+                $id = $_POST['id'];
+                $project->delete($id);
+                break;
+        }
         break;
     default:
         // Invalid Request Method

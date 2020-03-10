@@ -56,6 +56,44 @@ class Project
         $this->parse($stmt);
     }
 
+    public function create($name, $desc, $state, $impact, $modal_type, $link) {
+        try {
+            $front_img = $_FILES['front_img']['name'];
+            $modal_media = $_FILES['modal_media']['name'];
+            $query = "INSERT INTO project(`name`,`desc`,`state`,`impact`,`front_img`,`modal_media`,`modal_type`,`link`) VALUES ('$name', '$desc', '$state', '$impact', '$front_img','$modal_media','$modal_type','$link');";
+            $this->conn->exec($query);
+            copy($_FILES['front_img']['tmp_name'], SystemInfo::$path_project.$_FILES['front_img']['name']);
+            copy($_FILES['modal_media']['tmp_name'], SystemInfo::$path_project.$_FILES['modal_media']['name']);
+            echo "Se guardaron los datos";
+        } catch (PDOException $e) {
+            echo "Error no se guardaron los datos.";
+        }
+    }
+
+    public function update($id, $name, $desc, $state, $impact, $modal_type, $link) {
+        try {
+            $front_img = $_FILES['front_img']['name'];
+            $modal_media = $_FILES['modal_media']['name'];
+            $query = "UPDATE project SET `name`='$name', `desc`='$desc', `state`='$state', `impact`='$impact', `front_img`='$front_img', `modal_media`='$modal_media', `modal_type`='$modal_type', `link`='$link' WHERE `id`='$id';";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute();
+            copy($_FILES['front_img']['tmp_name'], SystemInfo::$path_project.$_FILES['front_img']['name']);
+            copy($_FILES['modal_media']['tmp_name'], SystemInfo::$path_project.$_FILES['modal_media']['name']);
+            echo "Se actualizaron los datos";
+        } catch (PDOException $e) {
+            echo "Error no se guardaron los datos.";
+        }  
+    }
+
+    public function delete($id) {
+        try{
+            $query = "DELETE FROM project WHERE `id`='$id';";
+            $this->conn->exec($query);
+        } catch (PDOException $e) {
+            echo "Error no se elimino los datos.";
+        } 
+    }
+
     private function parse($stmt)
     {
         $num = $stmt->rowCount();
