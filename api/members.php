@@ -26,9 +26,11 @@ switch($request_method) {
             $member_id=intval($_GET["member_id"]);
             $member->read($member_id);
         }
-        else {
+        else if(isset($_GET["status"])){
             $status = empty($_GET["status"])?"current":$_GET["status"];
             $member->read_all($status);
+        } else {
+            
         }
 
         break;
