@@ -49,14 +49,18 @@ switch($request_method)
         switch($codeOp) {
             case 'create':
                 $project->create($name, $desc, $state, $impact, $modal_type, $link);
+                sleep(5);
+                header('Location: http://localhost:3001');
                 break;
             case 'update': 
                 $id = $_POST['id'];
                 $project->update($id, $name, $desc, $state, $impact, $modal_type, $link);
+                header('Location: http://localhost:3001/');
                 break;
             case 'delete':
                 $id = $_POST['id'];
                 $project->delete($id);
+                header('Location: http://localhost:3001/');
                 break;
         }
         break;

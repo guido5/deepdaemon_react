@@ -28,15 +28,15 @@ switch($request_method) {
         }
         else if(isset($_GET["status"])){
             $status = empty($_GET["status"])?"current":$_GET["status"];
-            $member->read_all($status);
+            $member->readByStatus($status);
         } else {
-            
+            $member->readAll();
         }
 
         break;
     case 'POST':
-        $nombre = $_POST["nombre"];
-        $apellido = $_POST["apellido"];
+        $name = $_POST["name"];
+        $lastname = $_POST["lastname"];
         $linkedin = $_POST["linkedin"];
         $email = $_POST["email"];
         $short_desc = $_POST["short_desc"];
@@ -47,30 +47,33 @@ switch($request_method) {
 
         switch($codeOp) {
             case 'create':
-                $member->write($nombre, 
-                        $apellido,
+                $member->write($name, 
+                        $lastname,
                         $linkedin,
                         $email,
                         $short_desc,
                         $long_desc,
                         $status,
                         $ss);
+                        header('Location: http://localhost:3001');
             break;
             case 'update':
                 $id = $_POST['id'];
                 $member->update($id,
-                        $nombre, 
-                        $apellido,
+                        $name, 
+                        $lastname,
                         $linkedin,
                         $email,
                         $short_desc,
                         $long_desc,
                         $status,
                         $ss);
+                        header('Location: http://localhost:3001');
             break;
             case 'delete':
                 $id = $_POST['id'];
                 $member->delete($id);
+                header('Location: http://localhost:3001');
             break;
         }
         

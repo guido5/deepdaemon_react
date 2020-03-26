@@ -21,7 +21,7 @@ class Member
         $this->conn = $db;
     }
 
-    public function read_all($status)
+    public function readByStatus($status)
     {
         // select all query
         $query = "SELECT member.id, CONCAT( member.name, ' ', member.lastname) AS name,
@@ -44,11 +44,22 @@ class Member
         $this->parse($stmt);
     }
 
+    public function readAll() {
+        $query = "SELECT *
+                    FROM member
+                    ORDER BY status;";
+        // prepare query statement
+        $stmt = $this->conn->prepare($query);
+        // execute query
+        $stmt->execute();
+        $this->parseList($stmt);
+    }
+
     public function read($id)
     {
         // select one by id query
         $query = "SELECT member.id, CONCAT( member.name, ' ', member.lastname) AS name,
-                            member.linkedin, member.email, member.long_desc, member.photo_filename,
+                            member.linkedin, member.email, member.short_desc, member.long_desc, member.status, member.photo_filename, member.ss,
                             GROUP_CONCAT( DISTINCT career.short_name ) AS `career`,
                             GROUP_CONCAT( DISTINCT career.name ) AS career_long,
                             GROUP_CONCAT( DISTINCT school.short_name ) AS `school`,
@@ -71,10 +82,10 @@ class Member
 
     public function write($name, $lastname, $linkedin, $email, $short_desc, $long_desc, $status, $ss) {
         try {
-            $file = $_FILES['archivo']['name'];
+            $file = $_FILES['photo_filename']['name'];
             $query = "INSERT INTO member(name, lastname, linkedin, email, short_desc, long_desc, status, photo_filename, ss) VALUES ('$name', '$lastname', '$linkedin', '$email', '$short_desc', '$long_desc', '$status', '$file', $ss);";
             $this->conn->exec($query);
-            copy($_FILES['archivo']['tmp_name'], SystemInfo::$path.$_FILES['archivo']['name']);
+            copy($_FILES['photo_filename']['tmp_name'], SystemInfo::$path.$_FILES['photo_filename']['name']);
             echo "Se guardaron los datos";
         } catch (PDOException $e) {
             echo "Error no se guardaron los datos.";
@@ -83,11 +94,11 @@ class Member
 
     public function update($id, $name, $lastname, $linkedin, $email, $short_desc, $long_desc, $status, $ss) {
         try {
-            $file = $_FILES['archivo']['name'];
+            $file = $_FILES['photo_filename']['name'];
             $query = "UPDATE member SET name='$name', lastname='$lastname', linkedin='$linkedin', email='$email', short_desc='$short_desc', long_desc='$long_desc', status='$status', photo_filename='$photo_filename', ss='$ss' WHERE id='$id';";
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
-            copy($_FILES['archivo']['tmp_name'], SystemInfo::$path.$_FILES['archivo']['name']);
+            copy($_FILES['photo_filename']['tmp_name'], SystemInfo::$path.$_FILES['photo_filename']['name']);
             echo "Se actualizaron los datos";
         } catch (PDOException $e) {
             echo "Error no se guardaron los datos.";
@@ -147,6 +158,7 @@ class Member
             );
         }
     }
+
     private function parse_one($stmt)
     {
         $num = $stmt->rowCount();
@@ -159,8 +171,11 @@ class Member
                     "name" => $name,
                     "linkedin" => $linkedin,
                     "email" => $email,
+                    "short_desc" => $short_desc,
+                    "status" => $status,
                     "long_desc" => $long_desc,
                     "photo_filename" => $photo_filename,
+                    "ss" => $ss,
                     "career" => is_null($career) ? [] : explode(",", $career),
                     "school" => is_null($school) ? [] : explode(",", $school),
                     "career_long" => is_null($career_long) ? [] : explode(",", $career_long),
@@ -178,4 +193,49 @@ class Member
             );
         }
     }
+
+    private function parseList($stmt)
+    {
+        $num = $stmt->rowCount();
+        // check if more than 0 record found
+        if ($num > 0) {
+            // members array
+            $members_arr = array();
+            // retrieve our table contents
+            // fetch() is faster than fetchAll()
+            // http://stackoverflow.com/questions/2770630/pdofetchall-vs-pdofetch-in-a-loop
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                // extract row
+                // this will make $row['name'] to
+                // just $name only
+                extract($row);
+                $member_item = array(
+                    "id" => $id,
+                    "name" => $name,
+                    "lastname" => $lastname,
+                    "linkedin" => $linkedin,
+                    "email" => $email,
+                    "short_desc" => $short_desc,
+                    "long_desc" => $long_desc,
+                    "status" => $status,
+                    "photo_filename" => $photo_filename,
+                );
+                array_push($members_arr, $member_item);
+            }
+
+            // set response code - 200 OK
+            http_response_code(200);
+
+            // show members data in json format
+            echo json_encode($members_arr);
+        } else {
+            // set response code - 404 Not found
+            http_response_code(404);
+            // tell the user no members found
+            echo json_encode(
+                array("message" => "No members found.")
+            );
+        }
+    }
+
 }

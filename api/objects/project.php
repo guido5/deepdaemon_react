@@ -39,7 +39,7 @@ class Project
 
     public function read($id)
     {
-        $query = "SELECT p.id, p.name, p.`desc`, p.impact, p.modal_type, p.modal_media, p.link,
+        $query = "SELECT p.id, p.name, p.`desc`, p.impact, p.state, p.modal_type, p.modal_media, p.link,
                     GROUP_CONCAT(DISTINCT CONCAT(member.name, ' ', member.lastname) ORDER BY member.lastname) AS members,
                     GROUP_CONCAT(DISTINCT tech.name ORDER BY tech.name) as tech_short,
                     GROUP_CONCAT(DISTINCT tech.desc ORDER BY tech.name) as tech_long
@@ -104,6 +104,7 @@ class Project
                     "id" => $id,
                     "name" => $name,
                     "desc" => $desc,
+                    "state" => $state,
                     "impact" => $impact,
                     "members" => is_null($members) ? [] : explode(",", $members),
                     "tech_short" => is_null($tech_short) ? [] : explode(",", $tech_short),
