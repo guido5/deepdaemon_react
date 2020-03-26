@@ -235,8 +235,7 @@ class DeepDaemon extends React.Component {
         </Container>
         <ModalMember
           ref={ip => {
-            this.membermodal = ip;
-            console.log(this.membermodal);
+            this.membermodal = ip;            
           }}
         />
         <ModalProject
