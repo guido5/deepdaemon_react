@@ -10,6 +10,7 @@ header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + (60 * 60)));
 include_once './config/database.php';
 include_once './config/util.php';
 include_once './objects/project.php';
+include_once './objects/SystemInfo.php';
 
 // instantiate database object
 $database = new Database();
@@ -50,17 +51,17 @@ switch($request_method)
             case 'create':
                 $project->create($name, $desc, $state, $impact, $modal_type, $link);
                 sleep(5);
-                header('Location: http://localhost:3001');
+                header('Location: '.SystemInfo::$urlAdminConection);
                 break;
             case 'update': 
                 $id = $_POST['id'];
                 $project->update($id, $name, $desc, $state, $impact, $modal_type, $link);
-                header('Location: http://localhost:3001/');
+                header('Location: '.SystemInfo::$urlAdminConection);
                 break;
             case 'delete':
                 $id = $_POST['id'];
-                $project->delete($id);
-                header('Location: http://localhost:3001/');
+                $project->deleteFromDatabase($id);
+                header('Location: '.SystemInfo::$urlAdminConection);
                 break;
         }
         break;

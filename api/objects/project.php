@@ -60,7 +60,7 @@ class Project
         try {
             $front_img = $_FILES['front_img']['name'];
             $modal_media = $_FILES['modal_media']['name'];
-            $query = "INSERT INTO project(`name`,`desc`,`state`,`impact`,`front_img`,`modal_media`,`modal_type`,`link`) VALUES ('$name', '$desc', '$state', '$impact', '$front_img','$modal_media','$modal_type','$link');";
+            $query = "INSERT INTO project(`name`,`desc`,`state`,`impact`,`front_img`,`modal_media`,`modal_type`,`link`) VALUES (NULLIF('$name',''), NULLIF('$desc',''), '$state', NULLIF('$impact',''), NULLIF('$front_img',''), NULLIF('$modal_media',''),'$modal_type',NULLIF('$link',''));";
             $this->conn->exec($query);
             copy($_FILES['front_img']['tmp_name'], SystemInfo::$path_project.$_FILES['front_img']['name']);
             copy($_FILES['modal_media']['tmp_name'], SystemInfo::$path_project.$_FILES['modal_media']['name']);
@@ -74,7 +74,7 @@ class Project
         try {
             $front_img = $_FILES['front_img']['name'];
             $modal_media = $_FILES['modal_media']['name'];
-            $query = "UPDATE project SET `name`='$name', `desc`='$desc', `state`='$state', `impact`='$impact', `front_img`='$front_img', `modal_media`='$modal_media', `modal_type`='$modal_type', `link`='$link' WHERE `id`='$id';";
+            $query = "UPDATE project SET `name`=NULLIF('$name',''), `desc`=NULLIF('$desc',''), `state`='$state', `impact`=NULLIF('$impact',''), `front_img`=NULLIF('$front_img',''), `modal_media`=NULLIF('$modal_media',''), `modal_type`='$modal_type', `link`=NULLIF('$link','') WHERE `id`='$id';";
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
             copy($_FILES['front_img']['tmp_name'], SystemInfo::$path_project.$_FILES['front_img']['name']);
@@ -85,7 +85,7 @@ class Project
         }  
     }
 
-    public function delete($id) {
+    public function deleteFromDatabase($id) {
         try{
             $query = "DELETE FROM project WHERE `id`='$id';";
             $this->conn->exec($query);
