@@ -83,7 +83,7 @@ class Member
     public function write($name, $lastname, $linkedin, $email, $short_desc, $long_desc, $status, $ss) {
         try {
             $file = $_FILES['photo_filename']['name'];
-            $query = "INSERT INTO member(name, lastname, linkedin, email, short_desc, long_desc, status, photo_filename, ss) VALUES ('$name', '$lastname', NULLIF('$linkedin',''), NULLIF('$email',''), NULLIF('$short_desc',''), NULLIF('$long_desc',''), '$status', NULLIF('$file',''), $ss);";
+            $query = "INSERT INTO member(name, lastname, linkedin, email, short_desc, long_desc, status, photo_filename, ss) VALUES (NULLIF('$name',''), NULLIF('$lastname',''), NULLIF('$linkedin',''), NULLIF('$email',''), NULLIF('$short_desc',''), NULLIF('$long_desc',''), '$status', NULLIF('$file',''), $ss);";
             $this->conn->exec($query);
             copy($_FILES['photo_filename']['tmp_name'], SystemInfo::$path.$_FILES['photo_filename']['name']);
             echo "Se guardaron los datos";
@@ -95,7 +95,7 @@ class Member
     public function update($id, $name, $lastname, $linkedin, $email, $short_desc, $long_desc, $status, $ss) {
         try {
             $file = $_FILES['photo_filename']['name'];
-            $query = "UPDATE member SET name='$name', lastname='$lastname', linkedin=NULLIF('$linkedin',''), email=NULLIF('$email',''), short_desc=NULLIF('$short_desc',''), long_desc=NULLIF('$long_desc',''), status='$status', photo_filename=NULLIF('$file',''), ss='$ss' WHERE id='$id';";
+            $query = "UPDATE member SET name=NULLIF('$name',''), lastname=NULLIF('$lastname',''), linkedin=NULLIF('$linkedin',''), email=NULLIF('$email',''), short_desc=NULLIF('$short_desc',''), long_desc=NULLIF('$long_desc',''), status='$status', photo_filename=NULLIF('$file',''), ss='$ss' WHERE id='$id';";
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
             copy($_FILES['photo_filename']['tmp_name'], SystemInfo::$path.$_FILES['photo_filename']['name']);
