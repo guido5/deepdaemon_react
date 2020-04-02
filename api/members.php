@@ -10,6 +10,7 @@ header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + (60 * 60)));
 include_once './config/database.php';
 include_once './config/util.php';
 include_once './objects/member.php';
+include_once './objects/SystemInfo.php';
 
 // instantiate database object
 $database = new Database();
@@ -55,7 +56,7 @@ switch($request_method) {
                         $long_desc,
                         $status,
                         $ss);
-                        header('Location: http://localhost:3001');
+                        header('Location: '.SystemInfo::$urlAdminConection);
             break;
             case 'update':
                 $id = $_POST['id'];
@@ -68,12 +69,12 @@ switch($request_method) {
                         $long_desc,
                         $status,
                         $ss);
-                        header('Location: http://localhost:3001');
+                        header('Location: '.SystemInfo::$urlAdminConection);
             break;
             case 'delete':
                 $id = $_POST['id'];
-                $member->delete($id);
-                header('Location: http://localhost:3001');
+                $member->deleteFromDatabase($id);
+                header('Location: '.SystemInfo::$urlAdminConection);
             break;
         }
         
