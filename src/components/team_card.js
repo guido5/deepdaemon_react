@@ -28,7 +28,7 @@ class Team_card extends React.Component {
   }
   componentDidMount() {
     fetch(System.urlConection + System.members + this.props.status, {
-      method: "GET"
+      method: "GET", cache: "no-store"
     })
       .then(res => res.json())
       .then(

@@ -20,7 +20,7 @@ class Modal_member extends React.Component {
   open(id) {
     this.setState({ showModal: true });
     fetch(System.urlConection + System.members + id, {
-      method: "GET"
+      method: "GET", cache: "no-store"
     })
       .then(res => res.json())
       .then(

@@ -22,7 +22,7 @@ class Project_card extends React.Component {
     };
   }
   componentDidMount() {
-    fetch(System.urlConection + System.projects + this.props.state, { method: "GET" })
+    fetch(System.urlConection + System.projects + this.props.state, { method: "GET", cache: "no-store" })
       .then(res => res.json())
       .then(
         result => {
