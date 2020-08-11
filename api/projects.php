@@ -9,12 +9,11 @@ header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + (60 * 60)));
 // include database and util files
 include_once './config/database.php';
 include_once './config/util.php';
-include_once './objects/project.php';
-include_once './objects/SystemInfo.php';
+include_once './model/project.php';
+include_once './SystemInfo.php';
 
 // instantiate database object
-$database = new Database();
-$db = $database->getConnection();
+$db = Database::getInstance();
 
 // initialize object
 $project = new Project($db);
