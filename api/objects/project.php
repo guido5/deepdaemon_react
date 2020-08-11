@@ -2,11 +2,11 @@
 class Project
 {
     // database connection and table name
-    private $conn;
+    private $db;
 
     public function __construct($db)
     {
-        $this->conn = $db;
+        $this->db = $db;
     }
 
     public function read_all()
@@ -16,7 +16,7 @@ class Project
                     FROM project p
                     ORDER BY p.name;";
         // prepare query statement
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this->db->getConnection()->prepare($query);
         // execute query
         $stmt->execute();
         $this->parse_all($stmt);
