@@ -1,8 +1,7 @@
 <?php
 
-class User{
+class User implements  JsonSerializable{
 
-    private $conn;
     private $id;
     private $name;
     private $lastname;
@@ -11,29 +10,65 @@ class User{
     private $permissions;
 
 
-    public function __construct($db)
+    public function __construct($id, $name, $lastname, $username, $password, $permissions)
     {
-        $this->conn = $db;
+        $this->id = $id;
+        $this->name = $name;
+        $this->lastname = $lastname;
+        $this->username = $username;
+        $this->password = $password;
+        $this->permissions = $permissions;
     }
 
-    public function validate($username, $password){
+    public function getId() { return $this->id; }
+
+    public function getName() { return $this->name; }
+
+    public function getLastname() { return $this->lastname; }
+
+    public function getUsername() { return $this->username; }
+
+    public function getPassword() { return $this->password; }
+
+    public function getPermissions() { return $this->permissions; }
+
+    public function jsonSerialize()
+    {
+        return 
+        [
+            'id'   => $this->getId(),
+            'name' => $this->getName(),
+            'lastname' => $this->getLastname(),
+            'username' => $this->getUsername(),
+            'password' => $this->getPassword(),
+            'permissions' => $this->getPermissions()
+        ];
+    }
+
+    public static function validate($username, $password){
+        $database = Database::getInstance();
+        $conn = $database->getConnection();
         $query = "SELECT * FROM access where username='$username' and password='$password'";
-         // prepare query statement
-         $stmt = $this->conn->prepare($query);
-         // execute query
-         $stmt->execute();
-         $number = $stmt->rowCount();
-         if($number == 1 ) {
-             return true;
-         }
-         
+        // prepare query statement
+        $stmt = $conn->prepare($query);
+        // execute query
+        $stmt->execute();
+        $user = User::parseUser($stmt);
+        return $user;
     }
 
-    private function parse($stmt) {
+    private static function parseUser($stmt) {
         $num = $stmt->rowCount();
-        // check if more than 0 record found
-        if ($num = 1) {
-            //Algoritmo de parseo
+        if ($num == 1) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            return new User(
+                $row["id"],
+                $row["name"],
+                $row["lastname"],
+                $row["username"],
+                $row["password"],
+                $row["permissions"]
+            );
         }
     }
 }

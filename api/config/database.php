@@ -1,6 +1,6 @@
 <?php
 
-include __DIR__ ."/../objects/SystemInfo.php";
+include_once '../SystemInfo.php';
 class Database
 {
 
@@ -33,8 +33,9 @@ class Database
 
     public static function getInstance() {
         if(self::$database == null) {
+            print_r(self::$database);
             return self::$database = new Database();
-        } 
+        }      
         return self::$database;
     }
 

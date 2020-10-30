@@ -2,7 +2,7 @@
 class Member
 {
     // database connection and table name
-    private $conn;
+    private $db;
     // object properties
     public $id;
     public $name;
@@ -18,7 +18,7 @@ class Member
     // constructor with $db as database connection
     public function __construct($db)
     {
-        $this->conn = $db;
+        $this->db = $db;
     }
 
     public function readByStatus($status)
@@ -38,7 +38,7 @@ class Member
                     GROUP BY member.id
                     ORDER BY member.lastname;";
         // prepare query statement
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this->db->getConnection()->prepare($query);
         // execute query
         $stmt->execute();
         $this->parse($stmt);
@@ -49,10 +49,33 @@ class Member
                     FROM member
                     ORDER BY status;";
         // prepare query statement
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this->db->getConnection()->prepare($query);
         // execute query
         $stmt->execute();
         $this->parseList($stmt);
+    }
+
+    public function read_complete() {
+        // select one by id query
+        $query = "SELECT member.*, 
+            GROUP_CONCAT(DISTINCT(school.school_id)) as school_id, 
+            GROUP_CONCAT(DISTINCT(school.name)) as school_name, 
+            GROUP_CONCAT(DISTINCT(career.career_id)) as career_id, 
+            GROUP_CONCAT(DISTINCT(career.name)) as career_name, 
+            GROUP_CONCAT(DISTINCT(project.project_id)) as project_id, 
+            GROUP_CONCAT(DISTINCT(project.name)) as project_name
+            FROM member
+            LEFT JOIN (SELECT grade.id, grade.id_member, grade.id_school, grade.id_career FROM grade) as grade ON grade.id_member = member.id 
+            LEFT JOIN (SELECT school.id as school_id, school.name FROM school) as school ON school.school_id = grade.id_school
+            LEFT JOIN (SELECT career.id as career_id, career.name  FROM career) as career ON career.career_id = grade.id_career
+            LEFT JOIN project_member ON project_member.id_member = member.id
+            LEFT JOIN (SELECT project.id as project_id, project.name FROM project) as project ON project_member.id_project = project.project_id
+            GROUP BY member.id";
+        // prepare query statement
+        $stmt = $this->db->getConnection()->prepare($query);
+        // execute query
+        $stmt->execute();
+        $this->parseComplete($stmt);
     }
 
     public function read($id)
@@ -74,7 +97,7 @@ class Member
                     WHERE member.id = $id
                     GROUP BY member.id;";
         // prepare query statement
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this->db->getConnection()->prepare($query);
         // execute query
         $stmt->execute();
         $this->parse_one($stmt);
@@ -84,7 +107,7 @@ class Member
         try {
             $file = $_FILES['photo_filename']['name'];
             $query = "INSERT INTO member(name, lastname, linkedin, email, short_desc, long_desc, status, photo_filename, ss) VALUES (NULLIF('$name',''), NULLIF('$lastname',''), NULLIF('$linkedin',''), NULLIF('$email',''), NULLIF('$short_desc',''), NULLIF('$long_desc',''), '$status', NULLIF('$file',''), $ss);";
-            $this->conn->exec($query);
+            $this->db->getConnection()->exec($query);
             copy($_FILES['photo_filename']['tmp_name'], SystemInfo::$path.$_FILES['photo_filename']['name']);
             echo "Se guardaron los datos";
         } catch (PDOException $e) {
@@ -96,7 +119,7 @@ class Member
         try {
             $file = $_FILES['photo_filename']['name'];
             $query = "UPDATE member SET name=NULLIF('$name',''), lastname=NULLIF('$lastname',''), linkedin=NULLIF('$linkedin',''), email=NULLIF('$email',''), short_desc=NULLIF('$short_desc',''), long_desc=NULLIF('$long_desc',''), status='$status', photo_filename=NULLIF('$file',''), ss='$ss' WHERE id='$id';";
-            $stmt = $this->conn->prepare($query);
+            $stmt = $this->db->getConnection()->prepare($query);
             $stmt->execute();
             copy($_FILES['photo_filename']['tmp_name'], SystemInfo::$path.$_FILES['photo_filename']['name']);
             echo "Se actualizaron los datos";
@@ -108,7 +131,7 @@ class Member
     public function deleteFromDatabase($id) {
         try{
             $query = "DELETE FROM member WHERE id='$id'";
-            $this->conn->exec($query);
+            $this->db->getConnection()->exec($query);
         } catch (PDOException $e) {
             echo "Error no se elimino los datos.";
         } 
@@ -219,6 +242,56 @@ class Member
                     "long_desc" => $long_desc,
                     "status" => $status,
                     "photo_filename" => $photo_filename,
+                );
+                array_push($members_arr, $member_item);
+            }
+
+            // set response code - 200 OK
+            http_response_code(200);
+
+            // show members data in json format
+            echo json_encode($members_arr);
+        } else {
+            // set response code - 404 Not found
+            http_response_code(404);
+            // tell the user no members found
+            echo json_encode(
+                array("message" => "No members found.")
+            );
+        }
+    }
+
+    private function parseComplete($stmt)
+    {
+        $num = $stmt->rowCount();
+        // check if more than 0 record found
+        if ($num > 0) {
+            // members array
+            $members_arr = array();
+            // retrieve our table contents
+            // fetch() is faster than fetchAll()
+            // http://stackoverflow.com/questions/2770630/pdofetchall-vs-pdofetch-in-a-loop
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                // extract row
+                // this will make $row['name'] to
+                // just $name only
+                extract($row);
+                $member_item = array(
+                    "id" => $id,
+                    "name" => $name,
+                    "lastname" => $lastname,
+                    "linkedin" => $linkedin,
+                    "email" => $email,
+                    "short_desc" => $short_desc,
+                    "long_desc" => $long_desc,
+                    "status" => $status,
+                    "photo_filename" => $photo_filename,
+                    "school_id" => is_null($school_id) ? [] : explode(",", $school_id),
+                    "school_name" => is_null($school_name) ? [] : explode(",", $school_name),
+                    "career_id" => is_null($career_id) ? [] : explode(",", $career_id),
+                    "career_name" => is_null($career_name) ? [] : explode(",", $career_name),
+                    "project_id" => is_null($project_id) ? [] : explode(",", $project_id),
+                    "project_name" => is_null($project_name) ? [] : explode(",", $project_name)
                 );
                 array_push($members_arr, $member_item);
             }

@@ -7,17 +7,16 @@ header("Content-Type: application/json; charset=UTF-8");
 header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + (60 * 60)));
 
 // include database and util files
-include_once './config/database.php';
-include_once './config/util.php';
-include_once './objects/member.php';
-include_once './objects/SystemInfo.php';
+include_once '../config/database.php';
+include_once '../config/util.php';
+include_once '../model/member.php';
+include_once '../SystemInfo.php';
 
 // instantiate database object
-$database = new Database();
-$db = $database->getConnection();
+$database = Database::getInstance();
 
 // initialize object
-$member = new Member($db);
+$member = new Member($database);
 
 $request_method=$_SERVER["REQUEST_METHOD"];
 switch($request_method) {
@@ -26,11 +25,13 @@ switch($request_method) {
         if(isset($_GET["member_id"])) {
             $member_id=intval($_GET["member_id"]);
             $member->read($member_id);
-        }
-        else if(isset($_GET["status"])){
+        } else if(isset($_GET["status"])){
             $status = empty($_GET["status"])?"current":$_GET["status"];
             $member->readByStatus($status);
-        } else {
+        } else if(!empty($_GET["all"])) {
+            $member->read_complete();
+        }
+         else {
             $member->readAll();
         }
 

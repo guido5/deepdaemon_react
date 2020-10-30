@@ -7,10 +7,10 @@ header("Content-Type: application/json; charset=UTF-8");
 header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + (60 * 60)));
 
 // include database and util files
-include_once './config/database.php';
-include_once './config/util.php';
-include_once './model/project.php';
-include_once './SystemInfo.php';
+include_once '../config/database.php';
+include_once '../config/util.php';
+include_once '../model/project.php';
+include_once '../SystemInfo.php';
 
 // instantiate database object
 $db = Database::getInstance();
@@ -32,6 +32,9 @@ switch($request_method)
         {
             $state = $_GET["state"];
             $project->read_by_state($state);
+        }
+        else if(!empty($_GET["all"])) {
+            $project->read_complete();
         }
         else 
         {

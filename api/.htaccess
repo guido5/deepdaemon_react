@@ -1,14 +1,16 @@
 RewriteEngine On # Turn on the rewriting engine
 
 #Rules for student
-RewriteRule ^members/?$ members.php [NC,L]
-RewriteRule ^members/([0-9]+)/?$ members.php?member_id=$1 [NC,L]
-RewriteRule ^members/([a-zA-Z]+)/?$ members.php?status=$1 [NC,L]
+RewriteRule ^members/?$ usecase/members.php [NC,L]
+RewriteRule ^members/([0-9]+)/?$ usecase/members.php?member_id=$1 [NC,L]
+RewriteRule ^members/all/?$ usecase/members.php?all=true [NC,L]
+RewriteRule ^members/([a-zA-Z]+)/?$ usecase/members.php?status=$1 [NC,L]
 
 #Rules for projects
-RewriteRule ^projects/?$ projects.php [NC,L]
-RewriteRule ^projects/([0-9]+)/?$ projects.php?project_id=$1 [NC,L]
-RewriteRule ^projects/([a-zA-Z]+)/?$ projects.php?state=$1 [NC,L]
+RewriteRule ^projects/?$ usecase/projects.php [NC,L]
+RewriteRule ^projects/([0-9]+)/?$ usecase/projects.php?project_id=$1 [NC,L]
+RewriteRule ^projects/all/?$ usecase/projects.php?all=true [NC,L]
+RewriteRule ^projects/([a-zA-Z]+)/?$ usecase/projects.php?state=$1 [NC,L]
 
 #Rules for login
-RewriteRule ^login/?$ login.php [NC,L]
+RewriteRule ^login/?$ usecase/login.php?username=$1&password=$2 [NC,L]

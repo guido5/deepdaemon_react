@@ -184,7 +184,7 @@ class DeepDaemon extends React.Component {
                 proyectos de IA aplicados a problemas reales o industriales, te
                 estamos buscando.
               </p>
-              <Button variant="secondary">Contáctanos</Button>
+              
             </Col>
           </Row>
         </Container>
